@@ -8,6 +8,12 @@ loadButtonElement.addEventListener("click", async () => {
   const courses = Object.values(data);
   const courseListElement = document.querySelector("#list");
 
+  for (const course of courses) {
+    const courseElement = renderCourse(course);
+    courseListElement.appendChild(courseElement);
+  }
+  /* BETTER PERFORMANCE !!!
+
   const coursesFragment = document.createDocumentFragment();
 
   courses
@@ -15,6 +21,7 @@ loadButtonElement.addEventListener("click", async () => {
     .forEach((courseElement) => coursesFragment.appendChild(courseElement));
 
   courseListElement.appendChild(coursesFragment);
+  */
 });
 
 function renderCourse(course) {

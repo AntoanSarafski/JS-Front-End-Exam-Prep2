@@ -5,14 +5,25 @@ const courseTypes = ["Long", "Medium", "Short"];
 const courseListElement = document.querySelector("#list");
 
 const loadButtonElement = document.querySelector("#load-course");
-const addButtonElement = document.querySelector("#add-course");
+const addSubmitButtonElement = document.querySelector("#add-course");
+const editSubmitButtonElement = document.querySelector("#edit-course");
 const courseTitleElement = document.querySelector("#course-name");
 const courseTypeElement = document.querySelector("#course-type");
 const courseDescriptionElement = document.querySelector("#description");
 const courseTeacherElement = document.querySelector("#teacher-name");
 
 loadButtonElement.addEventListener("click", loadCourses);
-addButtonElement.addEventListener("click", addCourse);
+addSubmitButtonElement.addEventListener("click", addCourse);
+editSubmitButtonElement.addEventListener("click", editCourse);
+
+async function editCourse(e) {
+  e.preventDefault();
+
+  const title = courseTitleElement.value;
+  const type = courseTypeElement.value;
+  const description = courseDescriptionElement.value;
+  const teacher = courseTeacherElement.value;
+}
 
 async function addCourse(e) {
   e.preventDefault();
@@ -20,6 +31,10 @@ async function addCourse(e) {
   const type = courseTypeElement.value;
   const description = courseDescriptionElement.value;
   const teacher = courseTeacherElement.value;
+
+  if (!courseTypes.includes(type)) {
+    return;
+  }
 
   const course = {
     title,
@@ -106,6 +121,17 @@ function renderCourse(course) {
   courseContainer.appendChild(descriptionElement);
   courseContainer.appendChild(editButtonElement);
   courseContainer.appendChild(finishButtonElement);
+
+  editButtonElement.addEventListener("click", (e) => {
+    courseTitleElement.value = course.title;
+    courseTypeElement.value = course.type;
+    courseDescriptionElement.value = course.description;
+    courseTeacherElement.value = course.teacher;
+
+    courseContainer.remove();
+    addSubmitButtonElement.disabled = true;
+    editSubmitButtonElement.disabled = false;
+  });
 
   return courseContainer;
 }

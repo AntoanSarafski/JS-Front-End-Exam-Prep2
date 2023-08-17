@@ -1,9 +1,43 @@
 const tasksUrl = `http://localhost:3030/jsonstore/tasks`;
 
-const loadButtonElement = document.querySelector("#load-course");
-loadButtonElement.addEventListener("click", loadCourses);
+const courseTypes = ["Long", "Medium", "Short"];
 
+const loadButtonElement = document.querySelector("#load-course");
 const addButtonElement = document.querySelector("#add-course");
+const courseTitleElement = document.querySelector("#course-name");
+const courseTypeElement = document.querySelector("#course-type");
+const courseDescriptionElement = document.querySelector("#description");
+const courseTeacherElement = document.querySelector("#teacher-name");
+
+loadButtonElement.addEventListener("click", loadCourses);
+addButtonElement.addEventListener("click", addCourse);
+
+async function addCourse(e) {
+  e.preventDefault();
+  const title = courseTitleElement.value;
+  const type = courseTypeElement.value;
+  const description = courseDescriptionElement.value;
+  const teacher = courseTeacherElement.value;
+
+  const course = {
+    title,
+    type,
+    description,
+    teacher,
+  };
+
+  await fetch(tasksUrl, {
+    method: "POST",
+    body: JSON.stringify(course),
+  });
+
+  courseTitleElement.value = "";
+  courseTypeElement.value = "";
+  courseDescriptionElement.value = "";
+  courseTeacherElement.value = "";
+
+  await loadCourses();
+}
 
 async function loadCourses() {
   const response = await fetch(tasksUrl);
@@ -11,6 +45,11 @@ async function loadCourses() {
 
   const courses = Object.values(data);
   const courseListElement = document.querySelector("#list");
+
+  for (const course of courses) {
+    const courseElement = renderCourse(course);
+    courseListElement.appendChild(courseElement);
+  }
 }
 
 /* BETTER PERFORMANCE !!!
@@ -23,11 +62,6 @@ async function loadCourses() {
 
   courseListElement.appendChild(coursesFragment);
   */
-
-for (const course of courses) {
-  const courseElement = renderCourse(course);
-  courseListElement.appendChild(courseElement);
-}
 
 function renderCourse(course) {
   /* 
@@ -55,7 +89,6 @@ function renderCourse(course) {
 
   const editButtonElement = document.createElement("button");
   editButtonElement.className = "edit-btn";
-  editButtonElement.disabled = true;
   editButtonElement.textContent = "Edit Course";
 
   const finishButtonElement = document.createElement("button");

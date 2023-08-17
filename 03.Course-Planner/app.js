@@ -1,18 +1,19 @@
 const tasksUrl = `http://localhost:3030/jsonstore/tasks`;
 
 const loadButtonElement = document.querySelector("#load-course");
-loadButtonElement.addEventListener("click", async () => {
+loadButtonElement.addEventListener("click", loadCourses);
+
+const addButtonElement = document.querySelector("#add-course");
+
+async function loadCourses() {
   const response = await fetch(tasksUrl);
   const data = await response.json();
 
   const courses = Object.values(data);
   const courseListElement = document.querySelector("#list");
+}
 
-  for (const course of courses) {
-    const courseElement = renderCourse(course);
-    courseListElement.appendChild(courseElement);
-  }
-  /* BETTER PERFORMANCE !!!
+/* BETTER PERFORMANCE !!!
 
   const coursesFragment = document.createDocumentFragment();
 
@@ -22,7 +23,11 @@ loadButtonElement.addEventListener("click", async () => {
 
   courseListElement.appendChild(coursesFragment);
   */
-});
+
+for (const course of courses) {
+  const courseElement = renderCourse(course);
+  courseListElement.appendChild(courseElement);
+}
 
 function renderCourse(course) {
   /* 
@@ -50,6 +55,7 @@ function renderCourse(course) {
 
   const editButtonElement = document.createElement("button");
   editButtonElement.className = "edit-btn";
+  editButtonElement.disabled = true;
   editButtonElement.textContent = "Edit Course";
 
   const finishButtonElement = document.createElement("button");

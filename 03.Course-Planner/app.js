@@ -2,6 +2,8 @@ const tasksUrl = `http://localhost:3030/jsonstore/tasks`;
 
 const courseTypes = ["Long", "Medium", "Short"];
 
+const courseListElement = document.querySelector("#list");
+
 const loadButtonElement = document.querySelector("#load-course");
 const addButtonElement = document.querySelector("#add-course");
 const courseTitleElement = document.querySelector("#course-name");
@@ -40,11 +42,12 @@ async function addCourse(e) {
 }
 
 async function loadCourses() {
+  courseListElement.innerHTML = "";
+
   const response = await fetch(tasksUrl);
   const data = await response.json();
 
   const courses = Object.values(data);
-  const courseListElement = document.querySelector("#list");
 
   for (const course of courses) {
     const courseElement = renderCourse(course);
